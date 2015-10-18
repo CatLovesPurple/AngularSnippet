@@ -1,0 +1,38 @@
+<!doctype html>
+<html ng-app="app">
+  <head>
+    <title>Customized Ng-Directive</title>
+     <script src="https:////ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js">
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
+
+     <script>
+    var mod = angular.module("app", []);
+
+mod.directive("myNgClick", function(){
+  return function(scope, element, attr){
+        element.click(function(){
+            scope.$eval(attr.myNgClick);
+            scope.$apply();
+            // console.log(scope.counter);
+            // console.log("hha");
+        });
+    };
+});            
+    </script>
+  </head>
+  <body>
+
+  <div ng-init="counter = 0">
+        <div>
+            {{ counter }}
+        </div>
+    
+    <div my-ng-click="counter = counter+1">
+        Increment
+    </div>
+  </div>
+  </body>
+
+    
+</html>
