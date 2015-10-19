@@ -1,0 +1,54 @@
+<html ng-app="app">
+<head>
+    <title>Customized Ng-Directive</title>
+    <script src="https:////ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js">
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
+
+    <script>
+        var app = angular.module("app",[]);
+
+        app.directive("myImage", function() {
+            return function(scope, element, attributes) {
+                scope.$watch(attributes.myImage, function(newVal, oldVal) {
+                    element.css('background-image', 'url(' + newVal + ')');
+                });
+            };
+        });
+
+        app.controller("MainCtrl", function($scope){
+            $scope.imageUrl = [
+                "http://upload.wikimedia.org/wikipedia/commons/c/ca/AngularJS_logo.svg",
+                "http://upload.wikimedia.org/wikipedia/commons/a/aa/Logo_Google_2013_Official.svg",
+                "http://upload.wikimedia.org/wikipedia/en/9/9e/JQuery_logo.svg"
+            ];
+
+            $scope.currentIdx = 0;
+
+            $scope.next = function(){
+                $scope.currentIdx =
+                        ($scope.currentIdx + 1) % $scope.imageUrl.length;
+//                console.log("current index is: " + $scope.currentIdx);
+            };
+
+            $scope.prev = function(){
+                $scope.currentIdx = $scope.currentIdx == 0 ?
+                $scope.imageUrl.length - 1 :
+                $scope.currentIdx - 1;
+                //console.log("current index is: " + $scope.currentIdx);
+
+            };
+
+        });
+
+    </script>
+</head>
+
+<body ng-controller="MainCtrl">
+    <h1>Image index: {{currentIdx}}</h1>
+    <button ng-click="prev()">Previous</button>
+    <div my-image="imageUrl[currentIdx]" style="height: 120px; width: 600px; border: 1px solid red"></div>
+    <button ng-click="next()">Next</button>
+
+</body>
+</html>
