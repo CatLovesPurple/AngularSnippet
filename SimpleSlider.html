@@ -8,10 +8,23 @@
     <script>
         var app = angular.module("app",[]);
 
-        app.directive("myImage", function() {
+        app.directive('myImage', function() {
             return function(scope, element, attributes) {
                 scope.$watch(attributes.myImage, function(newVal, oldVal) {
                     element.css('background-image', 'url(' + newVal + ')');
+                });
+            };
+        });
+
+        app.directive("toggleButton", function() {
+            return function(scope, element, attributes) {
+                scope.$watch(attributes.toggleButton, function(val) {
+                    element.val(!val ? 'Disable' : 'Enable');
+                });
+
+                element.click(function(){
+                    scope[attributes.toggleButton] = !scope[attributes.toggleButton];
+                    scope.$apply();
                 });
             };
         });
@@ -28,16 +41,24 @@
             $scope.next = function(){
                 $scope.currentIdx =
                         ($scope.currentIdx + 1) % $scope.imageUrl.length;
-//                console.log("current index is: " + $scope.currentIdx);
             };
+
 
             $scope.prev = function(){
                 $scope.currentIdx = $scope.currentIdx == 0 ?
                 $scope.imageUrl.length - 1 :
                 $scope.currentIdx - 1;
-                //console.log("current index is: " + $scope.currentIdx);
-
             };
+
+            $scope.disabled = false;
+
+            setInterval(function(){
+                if($scope.disabled){
+                    return;
+                }
+                $scope.next();
+                $scope.$apply();
+            }, 1000);
 
         });
 
@@ -46,9 +67,10 @@
 
 <body ng-controller="MainCtrl">
     <h1>Image index: {{currentIdx}}</h1>
-    <button ng-click="prev()">Previous</button>
+    <!--<button ng-click="prev()">Previous</button>-->
     <div my-image="imageUrl[currentIdx]" style="height: 120px; width: 600px; border: 1px solid red"></div>
-    <button ng-click="next()">Next</button>
+    <!--<button ng-click="next()">Next</button>-->
 
+    <input type="button" toggle-button="disabled"/>
 </body>
 </html>
